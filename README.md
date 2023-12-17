@@ -1,2 +1,2 @@
-# Programming_Language_Concepts
-This is a collection of the programs for my CS280 : Programing Language Concepts Class.
+# CS280 Programming_Language_Concepts
+This is a collection of the C++ programs I completed for my Programing Language Concepts Class.
