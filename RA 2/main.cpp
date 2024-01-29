@@ -1,48 +1,91 @@
 #include <iostream>
 #include <string>
+#include <cctype>
+#include <sstream>
+#include <fstream>
+#include <iomanip>
 using namespace std;
+
 int main(){
+      
 
-int character; // use int, because char cannot represent EOF
-    
-    string class_name = "Concepts of Programming Languages";
-    
-    string mystery = "Programming";
-    int start = class_name.find("Programming");
-    int end = mystery.length();
-    string mySubtring = class_name.substr(start, end);
-    mySubtring += " -- testing this feature";
+      ifstream infile;
+      string fileName;
+      string longest_line = "";
+      string longest_word = "";
+      string line;
+      string word;
 
-    cout << class_name << "\n" << mySubtring << endl;
 
-    return 0;
+      int line_count = 0; 
+      int specified_count = 0;
+      int word_count = 0;
+
+      // Prompt
+      cout << "Enter input file name: "<< endl; 
+      cin >> fileName;
+
+      cout << endl;
+
+      infile.open(fileName.c_str());
+
+	if(!infile){
+		cerr << endl;
+		cerr << "File cannot be opened" << " " << fileName << endl;
+		exit (1);
+	}
+      else{
+            while (getline(infile, line)) {
+                  line_count++;
+                  int line_length = line.length();
+
+                  //comparing lines to find the longest line
+                  if (line_length > longest_line.length()){
+                        longest_line = line;
+                  }
+
+
+                  //finding lines that are commented
+                  if (line.find("#") < line_length || line.find("//") < line_length){
+                        specified_count++;    
+                  }
+
+                        
+                  //counting number of words
+                  istringstream lineStream (line);
+                  if( line_length ){
+                        while (lineStream >> word){
+                              //skipping commented lines
+                              if (line.find("#") < line_length || line.find("//") < line_length){
+                                    break;
+                              }
+                              else{
+                                    //comparing current word to saved longest word
+                                    if(word.length() > longest_word.length()){
+                                          longest_word = word;
+                                    }
+
+                                    //increase word count
+                                    word_count++;
+                              }
+                        }       
+                  }
+            }
+
+            // Print output (read from file) in Console
+            cout << "Total Number of Lines: " << line_count << endl;
+            cout << "Number of non-commented lines: " << line_count - specified_count << endl;
+            cout << "Line of Maximum Length: " << "\"" << longest_line << "\"" << endl;
+            cout << "Number of Words: " << word_count << endl;
+            cout << "Word of Maximum Length: " << "\"" << longest_word << "\"" << endl;
+
+      // Close the file
+      infile.close();
+      
+      }
+      return 0;
 }
 
 
 
-{
-                  "name": "C/C++: g++.exe build and debug active file",
-                  "type": "cppdbg",
-                  "request": "launch",
-                  "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
-                  "args": [],
-                  "stopAtEntry": false,
-                  "cwd": "${fileDirname}",
-                  "environment": [],
-                  "externalConsole": false,
-                  "MIMode": "gdb",
-                  "miDebuggerPath": "C:\\Coding\\mingw64\\bin\\gdb.exe",
-                  "setupCommands": [
-                        {
-                              "description": "Enable pretty-printing for gdb",
-                              "text": "-enable-pretty-printing",
-                              "ignoreFailures": true
-                        },
-                        {
-                              "description": "Set Disassembly Flavor to Intel",
-                              "text": "-gdb-set disassembly-flavor intel",
-                              "ignoreFailures": true
-                        }
-                  ],
-                  "preLaunchTask": "C/C++: g++.exe build active file"
-            }
+
